@@ -1,8 +1,6 @@
 package com.example.firstapplication.ui.screen
 
-import android.app.Activity
 import android.util.Log
-import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -48,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.firstapplication.R
+import com.example.firstapplication.navigation.Screens
 import com.example.firstapplication.utils.Height
 import com.example.firstapplication.utils.PermissionState
 import com.example.firstapplication.utils.Width
@@ -59,7 +58,6 @@ import com.example.firstapplication.viewModel.setName
 import com.example.firstapplication.viewModel.setPhoneNum
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -112,7 +110,6 @@ fun ProfileContent(
     ) { granted ->
         if (granted) viewModel.checkPermission(android.Manifest.permission.CAMERA)
     }
-
     val cameraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicturePreview()
     ) { newBitmap ->
@@ -120,6 +117,7 @@ fun ProfileContent(
             bitmap.value = it
         }
     }
+
     LaunchedEffect(bitmap.value){
         saveProfileImage(context, bitmap.value)
         viewModel.triggerTopBarRecompose()

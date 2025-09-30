@@ -57,8 +57,12 @@ fun SetupNavigation(
 
         composable(
             route = Screens.SelectedProduct.route
-        ){ SelectedProductScreen(navController = navController,
-            viewModel = viewModel) }
+        ){
+            SelectedProductScreen(
+                navController = navController,
+                viewModel = viewModel
+            )
+        }
 
         composable(
             route = Screens.Feedback.route
@@ -66,4 +70,5 @@ fun SetupNavigation(
 
     }
 }
+
 

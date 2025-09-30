@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDirection
@@ -72,7 +73,7 @@ fun FeedbackScreen(
             modifier = Modifier
                 .background(color = colorResource(id = R.color.light_cream))
                 .padding(WindowInsets.navigationBars.asPaddingValues())
-        ){
+        ) {
             Column {
                 Spacer(modifier = Modifier.height(padding.calculateTopPadding()))
                 FeedbackContent()
@@ -158,89 +159,88 @@ fun FeedbackContent() {
             }
         }
 
-            Column(
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.Bottom
+        ) {
+
+            feedbackMessage.forEach {
+                ChatText(it)
+            }
+            Height(10)
+
+            var isFocused by remember { mutableStateOf(true) }
+            val coroutineScope = rememberCoroutineScope()
+
+            Box(
                 modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.Bottom
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(end = 14.dp)
             ) {
-
-                feedbackMessage.forEach {
-                    ChatText(it)
-                }
-                Height(10)
-
-                var isFocused by remember { mutableStateOf(true) }
-                val coroutineScope = rememberCoroutineScope()
-
-
-                Box(
+                TextField(
+                    value = feedbackText.value,
+                    onValueChange = { feedbackText.value = it },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.White)
-                        .padding(end = 14.dp)
-                ) {
-                    TextField(
-                        value = feedbackText.value,
-                        onValueChange = { feedbackText.value = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onFocusChanged { focusState ->
-                                isFocused = focusState.isFocused
-                            },
-                        textStyle = TextStyle(
-                            textDirection = TextDirection.Rtl
-                        ),
-                        placeholder = {
-                            Text(
-                                text = "text",
-                                modifier = Modifier.fillMaxWidth(),
-                                style = TextStyle(
-                                    textDirection = TextDirection.Rtl
-                                )
-                            )
+                        .onFocusChanged { focusState ->
+                            isFocused = focusState.isFocused
                         },
-                        trailingIcon = if (isFocused) {
-                            {
-                                IconButton(
-
-                                    onClick = {
-                                        if (feedbackText.value != "") feedbackMessage.add(
-                                            feedbackText.value
-                                        )
-                                        coroutineScope.launch {
-
-                                            val delayJob = launch {
-                                                delay(1000)
-                                                isLoading = true
-                                            }
-                                            safeGetData { apiService.sendMessage(text = feedbackText.value) }
-                                            delayJob.cancel()
-                                            isLoading = false
-                                            feedbackText.value = ""
-                                        }
-                                    }) {
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.Send,
-                                        contentDescription = "search Icon",
-                                        tint = Color.Unspecified,
-                                    )
-                                }
-                            }
-                        } else null,
-                        colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            cursorColor = colorResource(R.color.dark_orange)
+                    textStyle = TextStyle(
+                        textDirection = TextDirection.Rtl
+                    ),
+                    placeholder = {
+                        Text(
+                            text = "text",
+                            modifier = Modifier.fillMaxWidth(),
+                            style = TextStyle(
+                                textDirection = TextDirection.Rtl
+                            )
                         )
+                    },
+                    trailingIcon = if (isFocused) {
+                        {
+                            IconButton(
+
+                                onClick = {
+                                    if (feedbackText.value != "") feedbackMessage.add(
+                                        feedbackText.value
+                                    )
+                                    coroutineScope.launch {
+
+                                        val delayJob = launch {
+                                            delay(1000)
+                                            isLoading = true
+                                        }
+                                        safeGetData { apiService.sendMessage(text = feedbackText.value) }
+                                        delayJob.cancel()
+                                        isLoading = false
+                                        feedbackText.value = ""
+                                    }
+                                }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.Send,
+                                    contentDescription = "search Icon",
+                                    tint = Color.Unspecified,
+                                )
+                            }
+                        }
+                    } else null,
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        cursorColor = colorResource(R.color.dark_orange)
                     )
-                }
+                )
             }
+        }
         if (isLoading)
             Box(
                 modifier = Modifier
@@ -294,7 +294,8 @@ fun CustomCircularProgressIndicator(
         animationSpec = infiniteRepeatable(
             animation = tween(
                 durationMillis = (360 / rotationSpeed * 1000).toInt(),
-                easing = CubicBezierEasing(0.2f, 0.1f, 0.68f, 0.92f)            )
+                easing = CubicBezierEasing(0.2f, 0.1f, 0.68f, 0.92f)
+            )
         )
     )
 

@@ -52,10 +52,8 @@ fun Menu(navController: NavHostController) {
         visible = menuExpanded.value,
         enter = fadeIn(animationSpec = tween(0)) +
                 slideInVertically(initialOffsetY = { 20 }),
-
         exit = fadeOut(animationSpec = tween(0)) +
                 slideOutVertically(targetOffsetY = { -20 })
-
     ) {
         DropdownMenu(
             expanded = true,
@@ -77,11 +75,11 @@ fun Menu(navController: NavHostController) {
 fun MenuBody(navController: NavHostController) {
     val menuItems = listOf(
         Pair("پروفایل کاربری", R.drawable.ic_profile),
-        Pair("سفارشات من", R.drawable.ic_order),
+        Pair("سفارشات من (به زودی)", R.drawable.ic_order),
         Pair("بازخورد", R.drawable.ic_support),
-        Pair("قوانین و مقررات ", R.drawable.ic_rules),
-        Pair("درباره ما", R.drawable.ic_about_us),
-        Pair("ارتباط با ما", R.drawable.ic_contact_us)
+        Pair("قوانین و مقررات (به زودی)", R.drawable.ic_rules),
+        Pair(" درباره ما (به زودی)", R.drawable.ic_about_us),
+        Pair("ارتباط با ما (به زودی)", R.drawable.ic_contact_us)
     )
     val context = LocalContext.current
     val bitmap = remember { mutableStateOf(loadProfileImage(context)) }
@@ -131,7 +129,8 @@ fun MenuBody(navController: NavHostController) {
                             indication = rememberRipple(),
                             onClick = { onMenuItemClick(text, navController) }
                         )
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .background(colorResource(colorItems(icon))),
                     horizontalArrangement = Arrangement.End
                 ) {
                     Text(
@@ -194,6 +193,16 @@ fun onMenuItemClick(label: String, navController: NavHostController) {
     }
 }
 
-
+fun colorItems(icon: Int): Int {
+    when (icon) {
+        R.drawable.ic_profile -> return R.color.white
+        R.drawable.ic_order -> return R.color.text_light_gray
+        R.drawable.ic_support -> return R.color.white
+        R.drawable.ic_rules -> return R.color.text_light_gray
+        R.drawable.ic_about_us -> return R.color.text_light_gray
+        R.drawable.ic_contact_us -> return R.color.text_light_gray
+    }
+    return R.color.white
+}
 
 

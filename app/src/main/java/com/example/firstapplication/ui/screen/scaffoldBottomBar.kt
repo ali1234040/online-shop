@@ -122,7 +122,7 @@ fun selectedItem(text:String, navController: NavHostController){
         "دسته بندی" -> {
             navController.navigate(Screens.Category.route) {
                 popUpTo(Screens.Home.route) {
-                    inclusive = false // خانه باقی بمونه
+                    inclusive = false
                 }
             }
         }
@@ -131,7 +131,7 @@ fun selectedItem(text:String, navController: NavHostController){
             bottomItemState.value = text
             navController.navigate(Screens.SelectedProduct.route) {
                 popUpTo(Screens.Home.route) {
-                    inclusive = false // خانه باقی بمونه
+                    inclusive = false
                 }
             }
       }

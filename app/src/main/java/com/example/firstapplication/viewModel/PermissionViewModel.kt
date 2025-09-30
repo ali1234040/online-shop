@@ -35,17 +35,3 @@ class ProfileImageViewModel @Inject constructor(
     }
 }
 
-//    private val _recompuseTrigger  = MutableStateFlow<Boolean>(true)
-//    val recomposeTrigger : StateFlow<Boolean> = _recompuseTrigger
-//
-//    fun recompuseScaffoldTopbar(){
-//       _recompuseTrigger.value = !_recompuseTrigger.value
-//    }
-//}
-///////////////
-//  private val _recomposeTrigger = MutableStateFlow(Unit)
-//    val recomposeTrigger: StateFlow<Unit> = _recomposeTrigger
-//
-//    fun triggerTopBarRecompose() {
-//        _recomposeTrigger.value = Unit
-//    }
